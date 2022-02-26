@@ -18,9 +18,10 @@ app.use((req, res) => { res.status(404).end() });
 db.connect(err => {
     if (err) throw err;
     console.log('Database connected');
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+    start();
+    // app.listen(PORT, () => {
+    //     console.log(`Server running on port ${PORT}`);
+    // });
 });
 
 // Basic function of application
@@ -31,8 +32,8 @@ function start() {
             message: "We have information on employee, department, and employee role. What would you like to do?",
             choices: [
                 "View all departments",
-                " View all roles",
-                " View all employees",
+                "View all roles",
+                "View all employees",
                 "Add a department",
                 "Add a role",
                 "Add an employee",
@@ -74,10 +75,13 @@ function start() {
 
 // function to view all departments
 function ViewAllDepartments() {
-    db.query("SELECT * FROM department", (err, results) => {
+    const sql = "SELECT * FROM department";
+    db.query(sql, (err, results) => {
         if (err) throw err;
+        console.log(`==========================`);
         console.log("Displaying all departments");
-        console.log(results);
+        console.log(`==========================`);
+        console.table(results);
         start();
     });
 }
@@ -86,8 +90,10 @@ function ViewAllDepartments() {
 function ViewAllRoles() {
     db.query("SELECT * FROM role", (err, results) => {
         if (err) throw err;
+        console.log(`=====================`);
         console.log("Displaying all roles");
-        console.log(results);
+        console.log(`=====================`);
+        console.table(results);
         start();
     });
 }
@@ -96,8 +102,10 @@ function ViewAllRoles() {
 function ViewAllEmployees() {
     db.query("SELECT * FROM employee", (err, results) => {
         if (err) throw err;
+        console.log(`========================`);
         console.log("Displaying all employees");
-        console.log(results);
+        console.log(`========================`);
+        console.table(results);
         start();
     });
 }
@@ -123,8 +131,10 @@ function addDepartment() {
                 },
                 (err) => {
                     if (err) throw err;
-                    console.log(`New department ${answer.department} has been added!`),
-                        start();
+                    console.log(`=============================`);
+                    console.log(`New department ${answer.department} has been added!`);
+                    console.log(`=============================`);
+                    start();
                 }
             )
         });
@@ -138,7 +148,7 @@ function addRole() {
 
         inquirer.prompt([{
                     type: "input",
-                    name: "tile",
+                    name: "title",
                     message: "What is the title for the new role?",
                     validate: (value) => {
                         if (value) {
@@ -188,7 +198,9 @@ function addRole() {
                     },
                     (err) => {
                         if (err) throw err;
+                        console.log(`=============================`);
                         console.log(`New role ${answer.title} has beend added!`);
+                        console.log(`=============================`);
                         start();
                     }
                 )
@@ -230,7 +242,7 @@ function addEmployee() {
                     type: "rawlist",
                     name: "role",
                     choices: () => {
-                        let choiceArray;
+                        let choiceArray = [];
                         for (let i = 0; i < results.length; i++) {
                             choiceArray.push(results[i].title);
                         }
@@ -258,7 +270,9 @@ function addEmployee() {
                     },
                     (err) => {
                         if (err) throw err;
+                        console.log(`=========================================`);
                         console.log(`New role ${answer.firstName} ${answer.lastName} has beend added! as a ${answer.role}`);
+                        console.log(`=========================================`);
                         start();
                     }
                 )
@@ -301,7 +315,6 @@ function update() {
                     }
                 }
 
-
                 db.query(
                     "UPDATE employee SET ? WHERE ?", [{
                             role_id: chosenRole,
@@ -312,7 +325,9 @@ function update() {
                     ],
                     (err) => {
                         if (err) throw err;
+                        console.log(`=======================`);
                         console.log(`Role has been updated!`);
+                        console.log(`=======================`);
                         start();
                     }
                 )
