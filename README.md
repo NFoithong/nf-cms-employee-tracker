@@ -12,7 +12,8 @@ Create interfaces that allow non-developers to easily view and interact with inf
 * The application is invoked by running `node app.js` in the command line
 
 * Follow the prompts to finish application
-* [Video Demo]  
+* [Video Demo] (https://user-images.githubusercontent.com/69065671/155864357-9515d3fe-2b9e-4dc1-ae33-1f23e2f056a3.mp4)
+
 
 ## Features
 
