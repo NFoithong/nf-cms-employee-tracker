@@ -64,6 +64,7 @@ function start() {
                 case "Update employee role":
                     update();
                     break;
+
                 case "Exit":
                     console.log("All done")
                     break;
@@ -100,6 +101,13 @@ function ViewAllRoles() {
 
 // function to view all employees
 function ViewAllEmployees() {
+    // db.query(
+    //         "SELECT e.id AS ID, e.first_name AS First, e.last_name AS Last, e.role_id AS Role, r.salary AS Salary, m.last_name AS Manager, d.name AS Department FROM employee e LEFT JOIN employee m ON e.manager_id = m.id LEFT JOIN role r ON e.role_id = r.title LEFT JOIN department d ON r.department_id = d.id", (err, results) => {
+    //             if (err) throw err;
+    //             console.table(results);
+    //             start();
+    //         }
+    //     )
     db.query("SELECT * FROM employee", (err, results) => {
         if (err) throw err;
         console.log(`========================`);
@@ -286,19 +294,34 @@ function update() {
         if (err) throw err;
 
         inquirer.prompt([{
-                type: "rawlist",
-                name: "employee",
-                choices: () => {
-                    let choiceArray = [];
-                    for (let i = 0; i < results.length; i++) {
-                        choiceArray.push(results[i].last_name);
-                    }
-                    // remove duplicates
-                    let cleanChoiceArray = [...new Set(choiceArray)];
-                    return cleanChoiceArray;
+                    type: "rawlist",
+                    name: "choice",
+                    choices: () => {
+                        let choiceArray = [];
+                        for (let i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].last_name);
+                        }
+                        // remove duplicates
+                        let cleanChoiceArray = [...new Set(choiceArray)];
+                        return cleanChoiceArray;
+                    },
+                    message: "Select employee to update"
                 },
-                message: "What is the employee's new role"
-            }])
+                {
+                    name: "role",
+                    type: "rawlist",
+                    choices: () => {
+                        let choiceArray = [];
+                        for (let i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].title);
+                        }
+                        //remove duplicates
+                        let cleanChoiceArray = [...new Set(choiceArray)];
+                        return cleanChoiceArray;
+                    },
+                    message: "What is the employee's new role?"
+                }
+            ])
             .then(answer => {
                 let chosenEmployee;
                 let chosenRole;
