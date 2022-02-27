@@ -26,7 +26,7 @@ Create interfaces that allow non-developers to easily view and interact with inf
   * mysql2
 
 ## Website
-* Github
+* Github: https://github.com/NFoithong/nf-cms-employee-tracker.git
 
 ## License
 
